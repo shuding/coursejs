@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>course.js demo</title>
+  <link rel="stylesheet" media="print" href="bower_components/deck.js/core/print.css">
+  <link rel="stylesheet" media="screen" href="bower_components/deck.js/themes/style/swiss.css">
+  <link rel="stylesheet" media="screen" href="bower_components/deck.js/themes/transition/vertical-slide.css">
+  <link rel="stylesheet" media="screen" href='bower_components/nprogress/nprogress.css'/>
+  <link rel="stylesheet" media="screen" href="src/course.css">
+
+  <script src='bower_components/nprogress/nprogress.js'></script>
+</head>
+<body>
+
+<div class="deck-container" data-src="data/demo.md">
+  <p class="deck-status" aria-role="status">
+    <span class="deck-status-current"></span>
+    /
+    <span class="deck-status-total"></span>
+  </p>
+</div>
+
+
+<script src="bower_components/deck.js/modernizr.custom.js"></script>
+<script src="bower_components/deck.js/jquery.min.js"></script>
+
+<script src="src/course.js"></script>
+
+<script src="bower_components/deck.js/core/deck.core.js"></script>
+<script src="bower_components/deck.js/extensions/status/deck.status.js"></script>
+<script src="bower_components/deck.js/extensions/markdown/Markdown.Converter.js"></script>
+<script src="bower_components/deck.js/extensions/markdown/deck.markdown.js"></script>
+
+</body>
+</html>

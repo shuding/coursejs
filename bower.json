@@ -1,0 +1,27 @@
+{
+  "name": "coursejs",
+  "version": "0.0.1",
+  "authors": [
+    "quietshu <ds303077135@gmail.com>"
+  ],
+  "description": "A JavaScript library for creating web courses.",
+  "main": "course.js",
+  "moduleType": [
+    "es6"
+  ],
+  "keywords": [
+    "course",
+    "JavaScript",
+    "web",
+    "HTML5"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/quietshu/coursejs",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
