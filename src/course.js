@@ -2,6 +2,7 @@
  * Created by shuding on 3/13/15.
  * <ds303077135@gmail.com>
  */
+
 ;(function (window, $, undefined){
     var course = {
         src: '',
