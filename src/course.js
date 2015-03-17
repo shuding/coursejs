@@ -5,7 +5,8 @@
 ;(function (window, $, undefined){
     var course = {
         src: '',
-        pageCount: 0
+        pageCount: 0,
+        pageNow: 0
     };
 
     function init() {
@@ -15,31 +16,47 @@
         NProgress.configure({
             showSpinner: false,
             trickle: false,
-            speed: 800
+            speed: 800,
+            color: '#c00'
         });
         NProgress.set(0.0);
 
         $(document).bind('deck.change', function (event, from, to) {
             if (!(course.pageCount > 0))
                 course.pageCount = +$('.deck-status-total').text();
-            NProgress.set((to + 1) / course.pageCount);
+
+            // a trick for keeping nprogress from disappear
+            NProgress.set(Math.min((to + 1) / course.pageCount, 0.9999));
+
+            course.pageNow = to + 1;
         });
     }
 
+    // modify markdown by rules
     function modifyMD(str) {
-        return str.replace(/\[textarea(.+?)\]/g, function (a, b) {
-            return '<textarea onkeyup="(function(self){' + b + '})(this)"></textarea>';
-        });
+        // rules
+        return str
+            .replace(/[^\t`]\[link (.+?)\]/g, function (a, b) {
+                return '<a href="' + b + '">' + b + '</a>';
+            })
+            .replace(/[^\t`]\[question (.+?)\]/g, function (a, b) {
+                return '<textarea onkeyup="(function(self){var result=-1,value=self.value;' + b + ';self.parentNode.className=(result==1?\'t\':\'f\')})(this)"></textarea>';
+            })
+            .replace(/[^\t`]\[center (.+?)\]/g, function (a, b) {
+                return '<p style="text-align: center">' + b + '</p>';
+            });
     }
 
+    // GET markdown document and split it by pages
     function getDoc() {
         var $container = $('.deck-container');
         course.src = $container.attr('data-src');
 
         var appendData = function (data) {
-            var index = data.lastIndexOf('## ');
+            var index = Math.max(data.lastIndexOf('\n## '), data.lastIndexOf('\n# '));
             if (index == -1)
                 return;
+
 
             var slideData = '\n' + data.substr(index, data.length - index) + '\n';
             slideData = modifyMD(slideData);
@@ -52,7 +69,7 @@
         };
 
         $.get(course.src, function (data) {
-            appendData(data);
+            appendData('\n' + data + '\n');
             init();
         });
     }
