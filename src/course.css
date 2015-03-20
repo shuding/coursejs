@@ -9,6 +9,10 @@ body {
   transition: opacity .3s ease;
 }
 
+.deck-container {
+  font-family: Helvetica, Arial;
+}
+
 .deck-status {
   text-align: right;
 }
