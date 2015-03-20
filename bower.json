@@ -23,5 +23,9 @@
     "bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "deck.js": "~1.1.0",
+    "nprogress": "~0.1.6"
+  }
 }
