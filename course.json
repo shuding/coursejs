@@ -1,0 +1,19 @@
+{
+  "path": "docs/",
+  "cover": "cover.md",
+  "course": [
+    {
+      "name": "chapter 1",
+      "slide": [
+        "introduction.md",
+        "introduction.md"
+      ]
+    },
+    {
+      "name": "chapter 2",
+      "slide": [
+        "end.md"
+      ]
+    }
+  ]
+}

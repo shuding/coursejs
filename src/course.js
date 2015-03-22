@@ -5,9 +5,14 @@
 
 ;(function (window, $, undefined){
     var course = {
-        src: '',
+        no: 0,
+        path: '',
+        src: [],
+        list: [],
         pageCount: 0,
-        pageNow: 0
+        pageNow: 0,
+        currentLocation: '',
+        progress: []
     };
 
     function init() {
@@ -29,6 +34,10 @@
             // a trick for keeping nprogress from disappear
             NProgress.set(Math.min((to + 1) / course.pageCount, 0.9999));
 
+            course.progress = JSON.parse(localStorage.getItem("courseprogress")) || [];
+            course.progress[course.no] = Math.floor((to + 1) / course.pageCount * 10000) * 0.01 + '%';
+            localStorage.setItem('courseprogress', JSON.stringify(course.progress));
+
             course.pageNow = to + 1;
         });
     }
@@ -49,15 +58,13 @@
     }
 
     // GET markdown document and split it by pages
-    function getDoc() {
+    function getDoc(src) {
         var $container = $('.deck-container');
-        course.src = $container.attr('data-src');
 
         var appendData = function (data) {
             var index = Math.max(data.lastIndexOf('\n## '), data.lastIndexOf('\n# '));
             if (index == -1)
                 return;
-
 
             var slideData = '\n' + data.substr(index, data.length - index) + '\n';
             slideData = modifyMD(slideData);
@@ -69,13 +76,79 @@
             $slideDOM.html(slideData).appendTo($container);
         };
 
-        $.get(course.src, function (data) {
+        $.get(src, function (data) {
             appendData('\n' + data + '\n');
             init();
         });
     }
 
-    getDoc();
+    // generate table of contents from course.src
+    function generateTable() {
+        var html = '<table>';
+        var count = 0;
+
+        html += '<thead><tr><th>Chapter</th><th>Slide</th><th>Progress</th></tr></thead><tbody>';
+        html += '<tr><td>Table of Contents</td><td><a href="index.html">index</a></td><td>/</td></tr>';
+
+        console.log(JSON.stringify(course));
+        for (var i = 0; i < course.src.length; ++i) {
+            html += '<tr><td rowspan="' + course.src[i].slide.length + '">' + course.src[i].name + '</td>';
+            for (var j = 0; course.src[i] && j < course.src[i].slide.length; ++j) {
+                if (j > 0)
+                    html += '<tr>';
+                html += '<td><a href="?s=' + count + '" target="_blank">' + course.src[i].slide[j] + '</a></td>';
+                html += '<td id="course-progress-' + count + '">0%</td>';
+                html += '</tr>';
+                course.list.push(course.src[i].slide[j]);
+                ++count;
+            }
+        }
+
+        if(typeof(window.Storage) !== "undefined") {
+            setInterval(function () {
+                course.progress = JSON.parse(localStorage.getItem("courseprogress")) || [];
+                for (var i = 0; i < course.list.length; ++i) {
+                    $('#course-progress-' + i).text(course.progress[i] || '0%');
+                }
+            }, 1000);
+        }
+
+        return html + '</tbody></table>';
+    }
+
+    function goHome(src) {
+        $.get(src, function (data) {
+            var converter = new Markdown.Converter();
+            var html = converter.makeHtml(data) + generateTable();
+
+            var $slideDOM = $('<section>');
+            $slideDOM[0].className = 'slide';
+            $slideDOM.html(html);
+            $('.deck-container').html('').append($slideDOM);
+        });
+    }
+
+    $.get('course.json', function (data) {
+        course.path = data.path || '';
+        course.src = data.course;
+        course.cover = data.cover;
+
+        for (var i = 0; i < course.src.length; ++i)
+            for (var j = 0; j < course.src[i].slide.length; ++j)
+                course.list.push(course.src[i].slide[j]);
+
+        course.currentLocation = window.location.search;
+        if (course.currentLocation.indexOf('?s') == 0) {
+            // slide page
+            course.no = +course.currentLocation.split('=')[1];
+            getDoc(course.path + course.list[course.no]);
+        }
+        else {
+            // go to home page (table of contents)
+            goHome(course.path + course.cover);
+        }
+
+    }, 'json');
 
     $(window).load(function () {
         setTimeout(function () {

@@ -10,7 +10,7 @@
 
 [center License: MIT]
 
-![I'm a nice qrcode!](qrcode.png)
+![I'm a nice qrcode!](docs/qrcode.png)
 
 [center Please scan the QR-code with your mobile device for entering this slide ^ ^]
 
@@ -63,7 +63,7 @@ Or..
 
 [question if (value == '2' || value.toUpperCase() == 'TWO') result = 1; else result = 0]
 
-Use JavaScript to check answer.
+Use JavaScript to check answer in this case.
 
 `2` and `Two` and `two` are all correct answers. Please have a try.
 
