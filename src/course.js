@@ -35,7 +35,7 @@
             NProgress.set(Math.min((to + 1) / course.pageCount, 0.9999));
 
             course.progress = JSON.parse(localStorage.getItem("courseprogress")) || [];
-            course.progress[course.no] = Math.floor((to + 1) / course.pageCount * 10000) * 0.01 + '%';
+            course.progress[course.no] = (to + 1) + '/' + course.pageCount;
             localStorage.setItem('courseprogress', JSON.stringify(course.progress));
 
             course.pageNow = to + 1;
@@ -84,6 +84,8 @@
 
     // generate table of contents from course.src
     function generateTable() {
+        course.progress = JSON.parse(localStorage.getItem("courseprogress")) || [];
+
         var html = '<table>';
         var count = 0;
 
@@ -96,8 +98,8 @@
             for (var j = 0; course.src[i] && j < course.src[i].slide.length; ++j) {
                 if (j > 0)
                     html += '<tr>';
-                html += '<td><a href="?s=' + count + '" target="_blank">' + course.src[i].slide[j] + '</a></td>';
-                html += '<td id="course-progress-' + count + '">0%</td>';
+                html += '<td><a href="?s=' + count + '#slide-' + (course.progress[count] ? (+course.progress[count].split('/')[0] - 1) : 0) + '" target="_blank">' + course.src[i].slide[j] + '</a></td>';
+                html += '<td id="course-progress-' + count + '">/</td>';
                 html += '</tr>';
                 course.list.push(course.src[i].slide[j]);
                 ++count;
