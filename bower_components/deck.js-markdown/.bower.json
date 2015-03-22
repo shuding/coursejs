@@ -1,0 +1,13 @@
+{
+  "name": "deck.js-markdown",
+  "homepage": "https://github.com/tmbrggmn/deck.js-markdown",
+  "_release": "d6b8603951",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "d6b86039511c337166916efe3079d4eb424b3692"
+  },
+  "_source": "git@github.com:tmbrggmn/deck.js-markdown.git",
+  "_target": "*",
+  "_originalSource": "git@github.com:tmbrggmn/deck.js-markdown.git"
+}

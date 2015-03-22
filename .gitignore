@@ -1,10 +1,10 @@
 # Created by https://www.gitignore.io
 
 ### Bower ###
-bower_components
-.bower-cache
-.bower-registry
-.bower-tmp
+# bower_components
+# .bower-cache
+# .bower-registry
+# .bower-tmp
 
 
 ### Node ###
@@ -43,7 +43,8 @@ node_modules
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
