@@ -67,6 +67,26 @@ th, td {
   border: 1px solid;
 }
 
+.course-note {
+  position: relative;
+  cursor: pointer;
+}
+
+.course-note:hover .course-note-inner {
+  opacity: 1;
+}
+
+.course-note-inner {
+  opacity: 0;
+  position: absolute;
+  font-size: 22px;
+  white-space: nowrap;
+}
+
+.course-note sup {
+  color: #1919BA;
+}
+
 @media screen and (max-width: 960px) {
   .deck-container {
     font-size: 1.25em;

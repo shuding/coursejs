@@ -40,6 +40,10 @@
 
             course.pageNow = to + 1;
         });
+
+        $('.course-math').each(function () {
+            katex.render(this.innerText, this);
+        });
     }
 
     // modify markdown by rules
@@ -47,13 +51,22 @@
         // rules
         return str
             .replace(/[^\t`]\[link (.+?)\]/g, function (a, b) {
-                return '<a href="' + b + '">' + b + '</a>';
+                return ' <a href="' + b + '">' + b + '</a> ';
+            })
+            .replace(/[^\t`]\[([^`[]+?)\]\((.+?)\)/g, function (a, b, c) {
+                return ' <a href="' + c + '" target="_blank">' + b + '</a> ';
             })
             .replace(/[^\t`]\[question (.+?)\]/g, function (a, b) {
                 return '<textarea onkeyup="(function(self){var result=-1,value=self.value;' + b + ';self.parentNode.className=(result==1?\'t\':\'f\')})(this)"></textarea>';
             })
             .replace(/[^\t`]\[center (.+?)\]/g, function (a, b) {
-                return '<p style="text-align: center">' + b + '</p>';
+                return ' <p style="text-align: center">' + b + '</p> ';
+            })
+            .replace(/[^\t`]\[note (.+?)\]/g, function (a, b) {
+                return ' <span class="course-note"><sup>*</sup><span class="course-note-inner">' + b + '</span></span> ';
+            })
+            .replace(/([^\t`])\$([^`]+?)\$/g, function (a, b, c) {
+                return b + '<span class="course-math">' + c + '</span>';
             });
     }
 
