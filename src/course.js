@@ -44,6 +44,22 @@
         $('.course-math').each(function () {
             katex.render(this.innerText, this);
         });
+
+        loadPlayground();
+    }
+
+    function loadPlayground() {
+        $('.course-playground').each(function () {
+            var contentWindow = $(this).children('.course-playground-result')[0].contentWindow,
+                $input = $(this).children('.course-playground-input');
+
+            var refresh = function () {
+                contentWindow.document.body.innerHTML = $(this).val();
+            };
+
+            $input.on('keyup', refresh);
+            refresh.call($input[0]);
+        });
     }
 
     // modify markdown by rules
@@ -53,7 +69,7 @@
             .replace(/[^\t`]\[link (.+?)\]/g, function (a, b) {
                 return ' <a href="' + b + '">' + b + '</a> ';
             })
-            .replace(/[^\t`]\[([^`[]+?)\]\((.+?)\)/g, function (a, b, c) {
+            .replace(/[^\t`!]\[([^`[]+?)\]\((.+?)\)/g, function (a, b, c) {
                 return ' <a href="' + c + '" target="_blank">' + b + '</a> ';
             })
             .replace(/[^\t`]\[question (.+?)\]/g, function (a, b) {
@@ -64,6 +80,9 @@
             })
             .replace(/[^\t`]\[note (.+?)\]/g, function (a, b) {
                 return ' <span class="course-note"><sup>*</sup><span class="course-note-inner">' + b + '</span></span> ';
+            })
+            .replace(/[^\t`]\[playground html init=['"](.+?)['"]\]/g, function (a, b) {
+                return '<p class="course-playground"><textarea class="course-playground-input">' + b + '</textarea><iframe class="course-playground-result"></iframe></p>';
             })
             .replace(/([^\t`])\$([^`]+?)\$/g, function (a, b, c) {
                 return b + '<span class="course-math">' + c + '</span>';

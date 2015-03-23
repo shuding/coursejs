@@ -3,16 +3,16 @@
   "cover": "cover.md",
   "course": [
     {
-      "name": "chapter 1",
+      "name": "chapter 1 - intro",
       "slide": [
-        "introduction.md",
-        "mathematics.md"
+        "introduction.md"
       ]
     },
     {
-      "name": "chapter 2",
+      "name": "chapter 2 - features",
       "slide": [
-        "end.md"
+        "mathematics.md",
+        "html.md"
       ]
     }
   ]

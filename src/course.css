@@ -87,6 +87,23 @@ th, td {
   color: #1919BA;
 }
 
+.course-playground-input {
+  display: inline-block;
+  float: left;
+  margin-top: 0;
+  border: 2px solid #444;
+  width: calc(50% - 1.5em);
+  height: 150px;
+}
+
+.course-playground-result {
+  float: right;
+  margin: 0;
+  border: 2px solid #444;
+  width: calc(50% - 0.5em);
+  height: calc(150px + 1em);
+}
+
 @media screen and (max-width: 960px) {
   .deck-container {
     font-size: 1.25em;
