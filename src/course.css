@@ -10,7 +10,8 @@ body {
 }
 
 .deck-container {
-  font-family: Helvetica, Arial;
+  font-family: "Open Sans", "Hiragino Sans GB", "Lantinghei TC", "Lantinghei SC", Helvetica, Arial, "Heiti SC", "Heiti TC", "Microsoft Yahei", "Microsoft Jhenghei", "Droid Sans Fallback";
+  -webkit-font-smoothing: antialiased;
 }
 
 .deck-status {
@@ -27,7 +28,22 @@ textarea {
   padding: 0.5em;
   margin-top: 1em;
   border: 2px solid #1575CC;
-  font-family: monospace, sans-serif;
+}
+
+pre.course-code {
+  height: 200px;
+  margin-top: 1em;
+  font-size: .6em;
+  border: 2px solid #c8c8c8;
+}
+
+pre, code, kbd, samp, textarea {
+  font-family: "Consolas", monospace, sans-serif;
+  -moz-tab-size:    4;
+  -o-tab-size:      4;
+  -webkit-tab-size: 4;
+  -ms-tab-size:     4;
+  tab-size:         4;
 }
 
 textarea:focus {
@@ -73,14 +89,16 @@ th, td {
 }
 
 .course-note:hover .course-note-inner {
-  opacity: 1;
+  display: inherit;
 }
 
 .course-note-inner {
-  opacity: 0;
+  display: none;
   position: absolute;
   font-size: 22px;
   white-space: nowrap;
+  box-shadow: 0 0 0 1px;
+  background-color: white;
 }
 
 .course-note sup {
@@ -91,17 +109,21 @@ th, td {
   display: inline-block;
   float: left;
   margin-top: 0;
+  margin-bottom: 20px;
   border: 2px solid #444;
   width: calc(50% - 1.5em);
   height: 150px;
+  font-size: .6em;
 }
 
 .course-playground-result {
   float: right;
   margin: 0;
+  margin-bottom: 20px;
   border: 2px solid #444;
   width: calc(50% - 0.5em);
-  height: calc(150px + 1em);
+  height: calc(150px + .6em);
+  overflow: scroll;
 }
 
 @media screen and (max-width: 960px) {

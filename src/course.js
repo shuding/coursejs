@@ -15,6 +15,15 @@
         progress: []
     };
 
+    function htmlEscape(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+    }
+
     function init() {
         $.deck.defaults.touch.swipeDirection = 'vertical';
         $.deck('.slide');
@@ -49,12 +58,24 @@
     }
 
     function loadPlayground() {
-        $('.course-playground').each(function () {
+        $('.course-playground-html').each(function () {
             var contentWindow = $(this).children('.course-playground-result')[0].contentWindow,
                 $input = $(this).children('.course-playground-input');
 
             var refresh = function () {
                 contentWindow.document.body.innerHTML = $(this).val();
+            };
+
+            $input.on('keyup', refresh);
+            refresh.call($input[0]);
+        });
+        $('.course-playground-css').each(function () {
+            var contentWindow = $(this).children('.course-playground-result')[0].contentWindow,
+                html = $(this).children('.course-playground-result')[0].dataset['content'],
+                $input = $(this).children('.course-playground-input');
+
+            var refresh = function () {
+                contentWindow.document.body.innerHTML = '<style>' + $(this).val() + '</style>' + html;
             };
 
             $input.on('keyup', refresh);
@@ -66,23 +87,32 @@
     function modifyMD(str) {
         // rules
         return str
-            .replace(/[^\t`]\[link (.+?)\]/g, function (a, b) {
-                return ' <a href="' + b + '">' + b + '</a> ';
+            .replace(/([^\t`])\[link (.+?)\]/g, function (a, b, c) {
+                return b + ' <a href="' + b + '">' + c + '</a> ';
             })
-            .replace(/[^\t`!]\[([^`[]+?)\]\((.+?)\)/g, function (a, b, c) {
-                return ' <a href="' + c + '" target="_blank">' + b + '</a> ';
+            .replace(/([^\t`!])\[([^`[]+?)\]\((.+?)\)/g, function (a, b, c, d) {
+                return b + ' <a href="' + d + '" target="_blank">' + c + '</a> ';
             })
-            .replace(/[^\t`]\[question (.+?)\]/g, function (a, b) {
-                return '<textarea onkeyup="(function(self){var result=-1,value=self.value;' + b + ';self.parentNode.className=(result==1?\'t\':\'f\')})(this)"></textarea>';
+            .replace(/([^\t`])\[question (.+?)\]/g, function (a, b, c) {
+                return b + '<textarea onkeyup="(function(self){var result=-1,value=self.value;' + c + ';self.parentNode.className=(result==1?\'t\':\'f\')})(this)"></textarea>';
             })
-            .replace(/[^\t`]\[center (.+?)\]/g, function (a, b) {
-                return ' <p style="text-align: center">' + b + '</p> ';
+            .replace(/([^\t`])\[code ([\s\S]+?)\]/g, function (a, b, c) {
+                return b + ' <pre class="course-code">' + htmlEscape(c) + '</pre>';
             })
-            .replace(/[^\t`]\[note (.+?)\]/g, function (a, b) {
-                return ' <span class="course-note"><sup>*</sup><span class="course-note-inner">' + b + '</span></span> ';
+            .replace(/([^\t`])\[center (.+?)\]/g, function (a, b, c) {
+                return b + ' <p style="text-align: center">' + c + '</p> ';
             })
-            .replace(/[^\t`]\[playground html init=['"](.+?)['"]\]/g, function (a, b) {
-                return '<p class="course-playground"><textarea class="course-playground-input">' + b + '</textarea><iframe class="course-playground-result"></iframe></p>';
+            .replace(/([^\t`])\[underline (.+?)\]/g, function (a, b, c) {
+                return b + '<span style="text-decoration: underline">' + c + '</span>';
+            })
+            .replace(/([^\t`])\[note ([\s\S]+?)\]/g, function (a, b, c) {
+                return b + ' <span class="course-note"><sup>*</sup><span class="course-note-inner">' + c + '</span></span> ';
+            })
+            .replace(/([^\t`])\[playground html init=['"]([\s\S]+?)['"]\]/g, function (a, b, c) {
+                return b + '<p class="course-playground course-playground-html"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result"></iframe></p>';
+            })
+            .replace(/([^\t`])\[playground css init=['"]([\s\S]+?)['"] html=['"]([\s\S]+?)['"]\]/g, function (a, b, c, d) {
+                return b + '<p class="course-playground course-playground-css"><textarea class="course-playground-input">' + c + '</textarea><iframe class="course-playground-result" data-content="' + d + '"></iframe></p>';
             })
             .replace(/([^\t`])\$([^`]+?)\$/g, function (a, b, c) {
                 return b + '<span class="course-math">' + c + '</span>';
@@ -122,7 +152,6 @@
         var count = 0;
 
         html += '<thead><tr><th>Chapter</th><th>Slide</th><th>Progress</th></tr></thead><tbody>';
-        html += '<tr><td>Table of Contents</td><td><a href="index.html">index</a></td><td>/</td></tr>';
 
         console.log(JSON.stringify(course));
         for (var i = 0; i < course.src.length; ++i) {
@@ -172,14 +201,17 @@
                 course.list.push(course.src[i].slide[j]);
 
         course.currentLocation = window.location.search;
+
+        var randomTimeStamp =  '?t=' + Math.floor(Math.random() * 10000000);
+
         if (course.currentLocation.indexOf('?s') == 0) {
             // slide page
             course.no = +course.currentLocation.split('=')[1];
-            getDoc(course.path + course.list[course.no]);
+            getDoc(course.path + course.list[course.no] + randomTimeStamp);
         }
         else {
             // go to home page (table of contents)
-            goHome(course.path + course.cover);
+            goHome(course.path + course.cover + randomTimeStamp);
         }
 
     }, 'json');
