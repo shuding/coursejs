@@ -12,7 +12,8 @@
       "name": "chapter 2 - features",
       "slide": [
         "mathematics.md",
-        "html.md"
+        "html.md",
+        "css.md"
       ]
     }
   ]

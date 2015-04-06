@@ -107,3 +107,4 @@ Acknowledgements:
 - [deck.js](https://github.com/imakewebthings/deck.js)
 - [nprogress](https://github.com/rstacruz/nprogress/)
 - [deck.js-markdown](https://github.com/tmbrggmn/deck.js-markdown)
+- [Behave.js](https://github.com/jakiestfu/Behave.js)

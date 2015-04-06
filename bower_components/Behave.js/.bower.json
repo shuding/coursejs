@@ -1,0 +1,14 @@
+{
+  "name": "Behave.js",
+  "homepage": "https://github.com/jakiestfu/Behave.js",
+  "_release": "67bce8df18",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "67bce8df18a6d39d1727fd0aaa023f18c71259b3"
+  },
+  "_source": "https://github.com/jakiestfu/Behave.js.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/jakiestfu/Behave.js.git",
+  "_direct": true
+}

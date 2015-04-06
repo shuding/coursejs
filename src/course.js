@@ -57,10 +57,25 @@
         loadPlayground();
     }
 
+    function bindCodeEditor(textarea) {
+        new Behave({
+            textarea:   textarea,
+            replaceTab: true,
+            softTabs:   true,
+            tabSize:    4,
+            autoOpen:   true,
+            overwrite:  true,
+            autoStrip:  true,
+            autoIndent: true
+        });
+    }
+
     function loadPlayground() {
         $('.course-playground-html').each(function () {
             var contentWindow = $(this).children('.course-playground-result')[0].contentWindow,
                 $input = $(this).children('.course-playground-input');
+
+            bindCodeEditor($(this).children('.course-playground-input')[0]);
 
             var refresh = function () {
                 contentWindow.document.body.innerHTML = $(this).val();
@@ -74,12 +89,23 @@
                 html = $(this).children('.course-playground-result')[0].dataset['content'],
                 $input = $(this).children('.course-playground-input');
 
+            bindCodeEditor($(this).children('.course-playground-input')[0]);
+
             var refresh = function () {
                 contentWindow.document.body.innerHTML = '<style>' + $(this).val() + '</style>' + html;
             };
 
             $input.on('keyup', refresh);
             refresh.call($input[0]);
+        });
+
+        // Behave hooks
+
+        BehaveHooks.add(['keydown'], function(data){
+            var numLines = data.lines.total,
+                fontSize = parseFloat(getComputedStyle(data.editor.element)['font-size']) + 2,
+                padding = parseInt(getComputedStyle(data.editor.element)['padding']);
+            data.editor.element.style.height = Math.max((((numLines * fontSize) + padding)), 150) + 'px';
         });
     }
 
